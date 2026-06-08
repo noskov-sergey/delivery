@@ -40,9 +40,8 @@ func Test_LocationReturnWhenParamsAreCorrectOnCreated(t *testing.T) {
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
 			got, err := NewLocation(test.x, test.y)
-			if err != nil {
-				t.Fatal(err)
-			}
+
+			assert.NoError(t, err)
 			assert.Equal(t, got, test.expected)
 			assert.Equal(t, got.IsValid(), test.expected.IsValid())
 		})
@@ -131,9 +130,9 @@ func Test_LocationCalculateDistance(t *testing.T) {
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
 			i, err := test.first.CalculateDistance(test.second)
-			if err != nil {
-				t.Fatal(err)
-			}
+
+			assert.NoError(t, err)
+
 			if i != test.expected {
 				t.Errorf("expected: %v, got: %v", test.expected, i)
 			}
@@ -166,6 +165,7 @@ func Test_LocationCalculateDistanceWithError(t *testing.T) {
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
 			_, err := test.first.CalculateDistance(test.second)
+
 			if err.Error() != test.expected.Error() {
 				t.Errorf("expected: %v, got: %v", test.expected, err)
 			}
