@@ -59,6 +59,10 @@ func (l Location) IsValid() bool {
 	return l.valid
 }
 
+func (l Location) IsEmpty() bool {
+	return l.x == 0 && l.y == 0 && !l.valid
+}
+
 func (l Location) CalculateDistance(other Location) (int, error) {
 	if !other.IsValid() {
 		return 0, ErrInvalidValue
