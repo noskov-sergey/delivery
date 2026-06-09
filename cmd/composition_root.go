@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"delivery/internal/core/domain/services"
 	"log"
 )
 
@@ -30,4 +31,9 @@ func (cr *CompositionRoot) CloseAll() {
 			log.Printf("close error: %v", err)
 		}
 	}
+}
+
+func (cr *CompositionRoot) NewOrderDispatcherService() services.OrderDispatchService {
+	orderDispatcher := services.NewOrderDispatchService()
+	return orderDispatcher
 }
