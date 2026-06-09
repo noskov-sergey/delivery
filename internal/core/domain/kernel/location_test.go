@@ -48,6 +48,76 @@ func Test_LocationReturnWhenParamsAreCorrectOnCreated(t *testing.T) {
 	}
 }
 
+func Test_LocationReturnXYWhenParamsAreCorrect(t *testing.T) {
+	tests := map[string]struct {
+		x uint8
+		y uint8
+
+		expected Location
+	}{
+		"5,5": {
+			x: 5,
+			y: 5,
+
+			expected: Location{
+				x: 5,
+				y: 5,
+
+				valid: true,
+			},
+		},
+		"6,7": {
+			x: 6,
+			y: 7,
+
+			expected: Location{
+				x: 6,
+				y: 7,
+
+				valid: true,
+			},
+		},
+	}
+
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			got, err := NewLocation(test.x, test.y)
+
+			assert.NoError(t, err)
+			assert.Equal(t, got.X(), test.expected.X())
+			assert.Equal(t, got.Y(), test.expected.Y())
+		})
+	}
+}
+
+func Test_LocationEmptyWhenParamsAreCorrect(t *testing.T) {
+	tests := map[string]struct {
+		x uint8
+		y uint8
+
+		expected bool
+	}{
+		"5,5": {
+			x: 5,
+			y: 5,
+
+			expected: false,
+		},
+	}
+
+	for name, test := range tests {
+		t.Run(name, func(t *testing.T) {
+			got, err := NewLocation(test.x, test.y)
+
+			errLocation := Location{}
+
+			assert.NoError(t, err)
+			assert.Equal(t, got.IsEmpty(), test.expected)
+			assert.NotEqual(t, errLocation.IsEmpty(), test.expected)
+		})
+	}
+}
+
 func Test_LocationReturnErrorWhenParamsAreInCorrectOnCreated(t *testing.T) {
 	tests := map[string]struct {
 		x uint8
