@@ -51,6 +51,14 @@ func RandomLocation() Location {
 	}
 }
 
+func (l Location) X() int {
+	return int(l.x)
+}
+
+func (l Location) Y() int {
+	return int(l.y)
+}
+
 func (l Location) Equal(other Location) bool {
 	return l.x == other.x && l.y == other.y
 }

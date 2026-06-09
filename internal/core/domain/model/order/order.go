@@ -8,12 +8,13 @@ import (
 )
 
 var (
-	ErrOrderIsNotAssign     = errors.New("order is not assign")
-	ErrOrderIsCompleted     = errors.New("order is completed")
-	ErrOrderIsAssign        = errors.New("order is already assign")
-	ErrOrderIdIsEmpty       = errors.New("order id is empty")
-	ErrOrderVolumeIsEmpty   = errors.New("order volume is empty")
-	ErrOrderLocationIsEmpty = errors.New("order location is empty")
+	ErrOrderIsNotAssign      = errors.New("order is not assign")
+	ErrOrderIsCompleted      = errors.New("order is completed")
+	ErrOrderIsAssign         = errors.New("order is already assign")
+	ErrOrderIdIsEmpty        = errors.New("order id is empty")
+	ErrOrderVolumeIsEmpty    = errors.New("order volume is empty")
+	ErrOrderLocationIsEmpty  = errors.New("order location is empty")
+	ErrOrderCourierIdIsEmpty = errors.New("order courierId is empty")
 )
 
 type Order struct {
@@ -33,7 +34,7 @@ func NewOrder(id uuid.UUID, location kernel.Location, volume int) (*Order, error
 		return nil, ErrOrderVolumeIsEmpty
 	}
 
-	if !location.IsEmpty() {
+	if location.IsEmpty() {
 		return nil, ErrOrderLocationIsEmpty
 	}
 
@@ -66,12 +67,13 @@ func (o *Order) Status() Status {
 }
 
 func (o *Order) Assign(courierID uuid.UUID) error {
-	if o.courierID != nil {
-		return ErrOrderIsAssign
+	if courierID == uuid.Nil {
+		return ErrOrderCourierIdIsEmpty
 	}
 
 	switch o.status {
 	case StatusCreated:
+		o.status = StatusAssigned
 		o.courierID = &courierID
 		return nil
 	case StatusCompleted:
