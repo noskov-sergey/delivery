@@ -274,7 +274,8 @@ func Test_CourierCompleteOrderWhenParamsAreCorrect(t *testing.T) {
 	err = courier.TakeOrder(goodOrder)
 	assert.NoError(t, err)
 
-	assert.Equal(t, order.StatusAssigned, goodOrder.Status())
+	err = goodOrder.Assign(courier.ID())
+	assert.NoError(t, err)
 
 	err = courier.CompleteOrder(goodOrder)
 	assert.NoError(t, err)

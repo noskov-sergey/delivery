@@ -58,5 +58,9 @@ func (o *orderDispatchService) Dispatch(order *order.Order, couriers []*courier.
 		return nil, err
 	}
 
+	if err = order.Assign(winner.ID()); err != nil {
+		return nil, err
+	}
+
 	return winner, nil
 }

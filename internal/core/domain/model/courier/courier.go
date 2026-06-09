@@ -116,12 +116,6 @@ func (c *Courier) TakeOrder(order *order.Order) error {
 			continue
 		}
 
-		err = order.Assign(c.ID())
-		if err != nil {
-			_ = storage.Clear(order.ID())
-			continue
-		}
-
 		take++
 		break
 	}
@@ -144,12 +138,7 @@ func (c *Courier) CompleteOrder(order *order.Order) error {
 		return err
 	}
 
-	err = order.Complete()
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return order.Complete()
 }
 
 func (c *Courier) CalculateTimeToLocation(target kernel.Location) (float64, error) {

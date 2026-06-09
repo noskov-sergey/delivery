@@ -82,7 +82,7 @@ func Test_DispatchBadOrder(t *testing.T) {
 
 	svc := NewOrderDispatchService()
 
-	c, err := svc.Dispatch(nil, []*courier.Courier{&valera})
+	c, err := svc.Dispatch((*order.Order)(nil), []*courier.Courier{&valera})
 
 	assert.ErrorIs(t, err, ErrOrderIsNil)
 	assert.Nil(t, c)
