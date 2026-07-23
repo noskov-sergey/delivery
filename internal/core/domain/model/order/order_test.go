@@ -23,6 +23,21 @@ func Test_OrderReturnWhenParamsAreCorrectOnCreated(t *testing.T) {
 	assert.Nil(t, order.CourierID())
 }
 
+func Test_OrderRestoreWhenParamsAreCorrect(t *testing.T) {
+	location, _ := kernel.NewLocation(2, 5)
+	id := uuid.New()
+	courierID := uuid.New()
+	volume := 5
+
+	restoredOrder := RestoreOrder(id, &courierID, location, volume, StatusAssigned)
+
+	assert.Equal(t, id, restoredOrder.ID())
+	assert.Equal(t, location, restoredOrder.Location())
+	assert.Equal(t, volume, restoredOrder.Volume())
+	assert.Equal(t, StatusAssigned, restoredOrder.Status())
+	assert.Equal(t, &courierID, restoredOrder.CourierID())
+}
+
 func Test_OrderReturnWhenParamsAreInCorrectOnCreated(t *testing.T) {
 	goodLocation, _ := kernel.NewLocation(1, 1)
 	wrongLocation := kernel.Location{}

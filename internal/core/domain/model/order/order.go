@@ -46,6 +46,16 @@ func NewOrder(id uuid.UUID, location kernel.Location, volume int) (*Order, error
 	}, nil
 }
 
+func RestoreOrder(id uuid.UUID, courierID *uuid.UUID, location kernel.Location, volume int, status Status) *Order {
+	return &Order{
+		id:        id,
+		courierID: courierID,
+		location:  location,
+		volume:    volume,
+		status:    status,
+	}
+}
+
 func (o *Order) ID() uuid.UUID {
 	return o.id
 }
