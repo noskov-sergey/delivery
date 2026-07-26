@@ -52,6 +52,16 @@ func NewCourier(name string, speed int, loc kernel.Location) (*Courier, error) {
 	}, nil
 }
 
+func RestoreCourier(id uuid.UUID, name string, speed int, loc kernel.Location, storagePlaces []*StoragePlace) *Courier {
+	return &Courier{
+		id:           id,
+		name:         name,
+		speed:        speed,
+		location:     loc,
+		storagePlace: storagePlaces,
+	}
+}
+
 func (c *Courier) ID() uuid.UUID {
 	return c.id
 }
@@ -66,6 +76,11 @@ func (c *Courier) Speed() int {
 
 func (c *Courier) Location() kernel.Location {
 	return c.location
+}
+
+// TODO TEST
+func (c *Courier) StoragePlaces() []*StoragePlace {
+	return c.storagePlace
 }
 
 // Logic Methods

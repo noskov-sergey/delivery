@@ -38,6 +38,15 @@ func NewStoragePlace(name string, totalVolume int) (*StoragePlace, error) {
 	}, nil
 }
 
+func RestoreStoragePlace(id uuid.UUID, name string, totalVolume int, orderID *uuid.UUID) *StoragePlace {
+	return &StoragePlace{
+		id:          id,
+		name:        name,
+		totalVolume: totalVolume,
+		orderID:     orderID,
+	}
+}
+
 func NewStoragePlaceStandard() *StoragePlace {
 	return &StoragePlace{
 		id:          uuid.New(),
