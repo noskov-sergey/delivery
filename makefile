@@ -10,7 +10,6 @@ build: test ## Build application
 	go build -o build/${APP_NAME} cmd/app/main.go
 
 test: ## Run tests
-	mockery
 	go test ./...
 
 generate: generate-server generate-grpc-clients generate-queues

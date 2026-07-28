@@ -43,7 +43,12 @@ func DtoToDomain(dto CourierDTO, storageDto []StoragePlaceDTO) *courier.Courier 
 	storagePlaces := make([]*courier.StoragePlace, len(storageDto))
 	for i, storagePlace := range storageDto {
 		storageNew := courier.RestoreStoragePlace(
-			storagePlace.ID, storagePlace.Name, storagePlace.TotalVolume, &storagePlace.OrderID)
+			storagePlace.ID, storagePlace.Name, storagePlace.TotalVolume, nil)
+
+		if storagePlace.OrderID != uuid.Nil {
+			storageNew = courier.RestoreStoragePlace(
+				storagePlace.ID, storagePlace.Name, storagePlace.TotalVolume, &storagePlace.OrderID)
+		}
 
 		storagePlaces[i] = storageNew
 	}
