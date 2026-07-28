@@ -17,7 +17,7 @@ func Test_CourierReturnWhenParamsAreCorrectOnCreated(t *testing.T) {
 	courier, err := NewCourier(name, speed, location)
 
 	assert.NoError(t, err)
-	assert.Equal(t, name, courier)
+	assert.Equal(t, name, courier.Name())
 	assert.Equal(t, speed, courier.Speed())
 	assert.Equal(t, location, courier.Location())
 	assert.NotNil(t, courier.storagePlace[0])

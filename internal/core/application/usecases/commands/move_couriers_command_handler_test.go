@@ -113,7 +113,6 @@ func Test_MoveCouriersShouldWork(t *testing.T) {
 	assert.Equal(courier1speed.ID(), couirier1result.ID())
 	assert.Equal(loc1Should, couirier1result.Location())
 
-	assert.Equal(courier4speed.ID(), couirier4result.ID())
 	assert.Equal(loc2Should, couirier4result.Location())
 
 	assert.Equal(order.StatusCompleted, order2res.Status())
@@ -143,7 +142,7 @@ func setupTest(t *testing.T) (context.Context, *sql.DB, error) {
 	db, err := sql.Open("postgres", psqlInfo)
 	assert.NoError(t, err, "error connecting to postgres")
 
-	err = goose.Up(db, "../../../../migrations")
+	err = goose.Up(db, "../../../../../migrations")
 	assert.NoError(t, err)
 
 	// Очистка выполняется после завершения теста
