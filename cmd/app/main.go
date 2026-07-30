@@ -42,6 +42,8 @@ func main() {
 
 	startCron(compositionRoot)
 
+	startKafkaConsumer(compositionRoot)
+
 	startWebServer(compositionRoot, cfg.HttpPort)
 }
 
@@ -95,7 +97,7 @@ func startWebServer(cr *cmd.CompositionRoot, port string) {
 	// And we serve HTTP until the world ends.
 
 	log.Info("starting server on port " + port + " ...")
-	log.Fatal(s.ListenAndServe())
+	log.Fatal(s.ListenAndServe(), h)
 }
 
 func makeConnectionString(host string, port string, user string,
@@ -134,4 +136,12 @@ func startCron(compositionRoot *cmd.CompositionRoot) {
 		log.Fatalf("ошибка при добавлении задачи: %v", err)
 	}
 	c.Start()
+}
+
+func startKafkaConsumer(compositionRoot *cmd.CompositionRoot) {
+	go func() {
+		if err := compositionRoot.NewBasketConsumer().Consume(); err != nil {
+			log.Fatalf("ERROR: kafka consumer got an error: %v", err)
+		}
+	}()
 }
