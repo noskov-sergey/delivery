@@ -7,8 +7,6 @@ option java_package = "queues.basket.events";
 option java_outer_classname = "BasketEventsProto";
 option go_package = "queues/basketeventspb";
 
-import "google/protobuf/timestamp.proto";
-
 message BasketConfirmedIntegrationEvent {
   string basket_id = 1;
   Address address = 2;

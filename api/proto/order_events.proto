@@ -7,8 +7,6 @@ option java_package = "queues.order.events";
 option java_outer_classname = "OrderEventsProto";
 option go_package = "queues/ordereventspb";
 
-import "google/protobuf/timestamp.proto";
-
 message OrderAssignedIntegrationEvent {
   string order_id = 1;
 }

@@ -13,6 +13,7 @@ require (
 	github.com/oapi-codegen/runtime v1.4.1
 	github.com/pressly/goose/v3 v3.27.2
 	github.com/robfig/cron/v3 v3.0.1
+	github.com/rs/cors v1.11.1
 	github.com/shopspring/decimal v1.4.0
 	github.com/stretchr/testify v1.11.1
 	github.com/testcontainers/testcontainers-go v0.43.0
