@@ -2,6 +2,7 @@ package order_repo
 
 import (
 	"context"
+	"database/sql"
 	"delivery/internal/core/domain/model/order"
 	"delivery/internal/core/ports"
 	"errors"
@@ -102,13 +103,12 @@ func (r *Repository) GetRandomCreatedStatus(ctx context.Context) (*order.Order, 
 	db := r.tracker.Db()
 
 	query := `SELECT id, courier_id, location_x, location_y, volume, status FROM orders WHERE status = $1 ORDER BY random() LIMIT 1`
-	result := db.QueryRowContext(ctx, query, order.StatusCreated)
-	if result == nil {
+	err := db.QueryRowContext(ctx, query, order.StatusCreated).Scan(&dto.ID, &dto.CourierID, &dto.LocationX, &dto.LocationY, &dto.Volume, &dto.Status)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, ports.ErrOrderNotFound
+		}
 		return nil, errors.New("failed to get random order")
-	}
-
-	if err := result.Scan(&dto.ID, &dto.CourierID, &dto.LocationX, &dto.LocationY, &dto.Volume, &dto.Status); err != nil {
-		return nil, fmt.Errorf("failed to get random order: %w", err)
 	}
 
 	return DtoToDomain(dto), nil

@@ -16,7 +16,6 @@ packages:
       dir: ./mocks/core/portsmocks
     interfaces:
       UnitOfWork:
-      UnitOfWorkFactory:
       CourierRepository:
       OrderRepository:
       GeoClient:
@@ -27,17 +26,18 @@ packages:
     interfaces:
       OrderDispatcher:
 
-  delivery/internal/core/application/commands:
+  delivery/internal/core/application/usecases/commands:
     config:
-      dir: ./mocks/core/application/commandsmocks
+      dir: ./mocks/core/application/usecases/commandsmocks
     interfaces:
       AssignOrdersCommandHandler:
       CreateOrderCommandHandler:
       MoveCouriersCommandHandler:
+      CreateCourierCommandHandler:
 
-  delivery/internal/core/application/queries:
+  delivery/internal/core/application/usecases/queries:
     config:
       dir: ./mocks/core/application/queriesmocks
     interfaces:
       GetAllCouriersQueryHandler:
-      GetNotCompletedOrdersQueryHandler:
+      GetAllUncompletedOrdersQueryHandler:

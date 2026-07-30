@@ -65,5 +65,5 @@ func (h *moveCouriersCommandHandler) Handle(ctx context.Context, command MoveCou
 		}
 	}
 
-	return h.factory.Commit(ctx)
+	return nil
 }

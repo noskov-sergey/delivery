@@ -10,6 +10,7 @@ import (
 
 var (
 	ErrOrderTrackerValueIsRequired = errors.New("tracker is required")
+	ErrOrderNotFound               = errors.New("order not found")
 )
 
 type OrderRepository interface {

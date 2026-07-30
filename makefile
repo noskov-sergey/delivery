@@ -10,7 +10,8 @@ build: test ## Build application
 	go build -o build/${APP_NAME} cmd/app/main.go
 
 test: ## Run tests
-	go test ./...
+	go clean -testcache
+	go test -v ./...
 
 generate: generate-server generate-grpc-clients generate-queues
 
