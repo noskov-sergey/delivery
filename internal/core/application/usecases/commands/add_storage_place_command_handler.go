@@ -46,5 +46,5 @@ func (h *addStoragePlaceCommandHandler) Handle(ctx context.Context, command AddS
 		return err
 	}
 
-	return h.factory.Commit(ctx)
+	return nil
 }

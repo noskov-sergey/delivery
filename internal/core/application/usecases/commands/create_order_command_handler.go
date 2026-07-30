@@ -44,5 +44,5 @@ func (h *createOrderCommandHandler) Handle(ctx context.Context, command CreateOr
 		return fmt.Errorf("add: %w", err)
 	}
 
-	return h.factory.Commit(ctx)
+	return nil
 }

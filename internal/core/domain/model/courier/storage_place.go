@@ -68,6 +68,9 @@ func (s *StoragePlace) TotalVolume() int {
 }
 
 func (s *StoragePlace) OrderID() *uuid.UUID {
+	if s.orderID == nil {
+		return &uuid.Nil
+	}
 	return s.orderID
 }
 

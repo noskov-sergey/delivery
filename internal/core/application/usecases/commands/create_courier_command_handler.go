@@ -44,5 +44,5 @@ func (h *createCourierCommandHandler) Handle(ctx context.Context, command Create
 		return fmt.Errorf("add: %w", err)
 	}
 
-	return h.factory.Commit(ctx)
+	return nil
 }
