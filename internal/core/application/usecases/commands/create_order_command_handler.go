@@ -2,7 +2,6 @@ package commands
 
 import (
 	"context"
-	"delivery/internal/core/domain/kernel"
 	"delivery/internal/core/domain/model/order"
 	"delivery/internal/core/ports"
 	"errors"
@@ -16,16 +15,21 @@ type CreateOrderCommandHandler interface {
 var _ CreateOrderCommandHandler = (*createOrderCommandHandler)(nil)
 
 type createOrderCommandHandler struct {
-	factory ports.UnitOfWork
+	factory   ports.UnitOfWork
+	geoClient ports.GeoClient
 }
 
-func NewCreateOrderCommandHandler(factory ports.UnitOfWork) (CreateOrderCommandHandler, error) {
+func NewCreateOrderCommandHandler(factory ports.UnitOfWork, geoClient ports.GeoClient) (CreateOrderCommandHandler, error) {
 	if factory == nil {
 		panic("factory is required")
 	}
+	if geoClient == nil {
+		panic("geoClient is required")
+	}
 
 	return &createOrderCommandHandler{
-		factory: factory,
+		factory:   factory,
+		geoClient: geoClient,
 	}, nil
 }
 
@@ -34,7 +38,12 @@ func (h *createOrderCommandHandler) Handle(ctx context.Context, command CreateOr
 		return errors.New("create order handler: invalid command")
 	}
 
-	order, err := order.NewOrder(command.OrderID(), kernel.RandomLocation(), command.Volume())
+	location, err := h.geoClient.GetLocation(ctx, command.Street())
+	if err != nil {
+		return fmt.Errorf("get location: %w", err)
+	}
+
+	order, err := order.NewOrder(command.OrderID(), location, command.Volume())
 	if err != nil {
 		return fmt.Errorf("new order: %w", err)
 	}
