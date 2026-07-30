@@ -26,7 +26,7 @@ generate-grpc-clients:
 
 generate-queues:
 	@rm -rf internal/generated/queues/*
-	@curl -o ./api/proto/basket_events.proto https://gitlab.com/microarch-ru/ddd-in-practice/system-design/-/raw/main/services/basket/contracts/basket_events.proto
+#	@curl -o ./api/proto/basket_events.proto https://gitlab.com/microarch-ru/ddd-in-practice/system-design/-/raw/main/services/basket/contracts/basket_events.proto
 	@protoc --go_out=./internal/generated ./api/proto/basket_events.proto
-	@curl -o ./api/proto/order_events.proto https://gitlab.com/microarch-ru/ddd-in-practice/system-design/-/raw/main/services/delivery/contracts/order_events.proto
+#	@curl -o ./api/proto/order_events.proto https://gitlab.com/microarch-ru/ddd-in-practice/system-design/-/raw/main/services/delivery/contracts/order_events.proto
 	@protoc --go_out=./internal/generated ./api/proto/order_events.proto

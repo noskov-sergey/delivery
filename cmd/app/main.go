@@ -8,12 +8,12 @@ import (
 	"net/http"
 	"os"
 
+	server "delivery/internal/adapters/in/http"
+
 	"github.com/joho/godotenv"
 	"github.com/labstack/gommon/log"
 	"github.com/pressly/goose/v3"
 	"github.com/robfig/cron/v3"
-
-	server "delivery/internal/adapters/in/http"
 )
 
 func main() {
@@ -41,6 +41,8 @@ func main() {
 	defer compositionRoot.CloseAll()
 
 	startCron(compositionRoot)
+
+	startKafkaConsumer(compositionRoot)
 
 	startWebServer(compositionRoot, cfg.HttpPort)
 }
@@ -71,6 +73,17 @@ func goDotEnvVariable(key string) string {
 	return os.Getenv(key)
 }
 
+func globalHeadersMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Set global headers here
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("X-Frame-Options", "DENY")
+
+		// Pass control to the next handler
+		next.ServeHTTP(w, r)
+	})
+}
+
 func startWebServer(cr *cmd.CompositionRoot, port string) {
 	// create a type that satisfies the `api.ServerInterface`, which contains an implementation of every operation from the generated code
 	server, err := server.NewServer(
@@ -84,11 +97,10 @@ func startWebServer(cr *cmd.CompositionRoot, port string) {
 
 	r := http.NewServeMux()
 
-	// get an `http.Handler` that we can use
 	h := servers.HandlerFromMux(server, r)
 
 	s := &http.Server{
-		Handler: h,
+		Handler: globalHeadersMiddleware(h),
 		Addr:    fmt.Sprintf("0.0.0.0:%s", port),
 	}
 
@@ -134,4 +146,12 @@ func startCron(compositionRoot *cmd.CompositionRoot) {
 		log.Fatalf("ошибка при добавлении задачи: %v", err)
 	}
 	c.Start()
+}
+
+func startKafkaConsumer(compositionRoot *cmd.CompositionRoot) {
+	go func() {
+		if err := compositionRoot.NewBasketConsumer().Consume(); err != nil {
+			log.Fatalf("ERROR: kafka consumer got an error: %v", err)
+		}
+	}()
 }

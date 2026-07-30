@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"database/sql"
+	kafkainput "delivery/internal/adapters/in/kafka"
 	"delivery/internal/adapters/out/grpc/geo"
 	"delivery/internal/adapters/out/postgres"
 	"delivery/internal/core/application/usecases/commands"
@@ -142,4 +143,19 @@ func (cr *CompositionRoot) NewGeoClient() ports.GeoClient {
 		cr.geoClient = client
 	})
 	return cr.geoClient
+}
+
+func (cr *CompositionRoot) NewBasketConsumer() kafkainput.BasketConsumer {
+	consumer, err := kafkainput.NewBasketConsumer(
+		[]string{cr.configs.KafkaHost},
+		cr.configs.KafkaConsumerGroup,
+		cr.configs.KafkaBasketEventsTopic,
+		cr.NewCreateOrderCommandHandler(),
+	)
+	if err != nil {
+		log.Fatalf("ERROR: create BasketConsumer: %v", err)
+	}
+
+	cr.RegisterCloser(consumer)
+	return consumer
 }
